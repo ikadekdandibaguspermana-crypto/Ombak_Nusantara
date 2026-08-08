@@ -1039,8 +1039,8 @@
         <h4>Kontak</h4>
         <ul>
           <li>hello@ombaknusantara.id</li>
-          <li>+62 819-1642-0672</li>
-          <li>Badung, Bali</li>
+          <li>+62 812 0000 0000</li>
+          <li>Denpasar, Bali</li>
         </ul>
       </div>
       <div>
@@ -1163,6 +1163,13 @@
       if (result && result.user) track('login', { method: 'google' });
     }).catch(err => {
       console.error('Gagal memproses hasil login redirect:', err);
+      let msg = 'Login Google gagal diproses (kode: ' + (err && err.code ? err.code : 'tidak diketahui') + ').';
+      if (err && err.code === 'auth/unauthorized-domain') {
+        msg = 'Domain situs ini belum diizinkan di Firebase Console.';
+      } else if (err && err.code === 'auth/web-storage-unsupported') {
+        msg = 'Browser HP ini memblokir penyimpanan yang dibutuhkan login (sering terjadi di mode private atau browser dalam-aplikasi seperti WhatsApp/Instagram). Coba buka situs ini di Chrome atau Safari langsung.';
+      }
+      alert(msg);
     });
   }
 
