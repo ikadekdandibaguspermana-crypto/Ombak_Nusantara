@@ -1129,15 +1129,9 @@
   // ---------- AUTENTIKASI GOOGLE (wajib untuk komentar & booking) ----------
   const authWidget = document.getElementById('authWidget');
 
-  const isMobileDevice = () => /Android|iPhone|iPad|iPod|Mobile|webOS/i.test(navigator.userAgent);
-
   async function loginWithGoogle() {
     if (!auth) { alert('Firebase belum dikonfigurasi.'); return null; }
     try {
-      if (isMobileDevice()) {
-        await signInWithRedirect(auth, provider);
-        return null; // halaman akan reload setelah kembali dari Google
-      }
       const result = await signInWithPopup(auth, provider);
       track('login', { method: 'google' });
       return result.user;
@@ -1149,7 +1143,9 @@
       } else if (err && err.code === 'auth/unauthorized-domain') {
         msg = 'Domain situs ini belum diizinkan di Firebase Console (Authentication → Settings → Authorized domains). Tambahkan domain situs ini di sana.';
       } else if (err && err.code === 'auth/popup-blocked') {
-        msg = 'Popup login diblokir browser. Izinkan popup untuk situs ini, lalu coba lagi.';
+        msg = 'Popup login diblokir browser. Izinkan popup untuk situs ini di pengaturan browser, lalu coba lagi.';
+      } else if (err && err.code === 'auth/cancelled-popup-request' || err && err.code === 'auth/popup-closed-by-user') {
+        return null; // pengguna menutup popup, tidak perlu tampilkan error
       } else if (err && err.code === 'auth/configuration-not-found') {
         msg = 'Konfigurasi Authentication belum lengkap di Firebase Console. Pastikan provider Google sudah diaktifkan.';
       }
