@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ombak Nusantara Travel — Jelajahi Bali Bersama Kami</title>
+<meta name="description" content="Paket wisata Bali profesional: Ubud, Uluwatu, Nusa Penida, Kintamani, Seminyak, dan Tanah Lot. Harga transparan, pemandu lokal berpengalaman.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!--
+  ====================================================================
+  KONFIGURASI FIREBASE — ganti nilai di bawah dengan config asli Anda.
+  Cara mendapatkan: Firebase Console → klik project → ikon gerigi
+  (Project settings) → scroll ke "Your apps" → pilih/registrasi app Web (</>)
+  → salin object firebaseConfig yang muncul, lalu tempel di bawah ini.
+  ====================================================================
+-->
+<script>
+  window.FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAhNWSAgoMXE_Bgeu3_8Dkz1cdTMMfny90",
+    authDomain: "travel-in-bali.firebaseapp.com",
+    projectId: "travel-in-bali",
+    storageBucket: "travel-in-bali.firebasestorage.app",
+    messagingSenderId: "252900542771",
+    appId: "1:252900542771:web:871f97c29f6e79813c9646",
+    measurementId: "G-SN7R8PH9R2"
+  };
+</script>
+<style>
+  :root{
+    --navy:#0D2B2E;
+    --navy-deep:#081B1D;
+    --sand:#F4EEE1;
+    --sand-dim:#E9DFC8;
+    --gold:#E7A23A;
+    --gold-dim:#c98a2c;
+    --coral:#E2694B;
+    --teal:#4FA69A;
+    --ink:#172523;
+    --paper:#FBF8F1;
+    --font-display:'Fraunces', serif;
+    --font-body:'Plus Jakarta Sans', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-body);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  ul{list-style:none;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;letter-spacing:-0.01em;}
+
+  :focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  @media (max-width:560px){.wrap{padding:0 20px;}}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--coral);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--coral);display:block;}
+  .on-dark .eyebrow{color:var(--gold);}
+  .on-dark .eyebrow::before{background:var(--gold);}
+
+  .navbar{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(13,43,46,0.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(244,238,225,0.08);
+    transition:background .3s var(--ease);
+  }
+  .navbar .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;}
+  @media (max-width:560px){
+    .navbar .wrap{height:64px;}
+    .brand-name{font-size:16.5px;}
+    .brand-mark{width:28px;height:28px;}
+  }
+  .brand{display:flex;align-items:center;gap:10px;color:var(--sand);}
+  .brand-mark{width:34px;height:34px;flex-shrink:0;}
+  .brand-name{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--sand);}
+  .nav-links{display:flex;align-items:center;gap:32px;}
+  .nav-links a{
+    color:rgba(244,238,225,0.82);
+    font-size:14.5px;font-weight:500;
+    position:relative;padding:4px 0;
+    transition:color .2s;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-2px;width:0;height:1.5px;
+    background:var(--gold);transition:width .25s var(--ease);
+  }
+  .nav-links a:hover{color:var(--sand);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--gold);color:var(--navy-deep);
+    padding:11px 22px;border-radius:100px;
+    font-weight:700;font-size:14px;
+    transition:transform .2s var(--ease), background .2s;
+  }
+  .nav-cta:hover{background:#f0b356;transform:translateY(-1px);}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;width:26px;}
+  .nav-toggle span{height:2px;background:var(--sand);border-radius:2px;transition:.3s var(--ease);}
+
+  @media (max-width:900px){
+    .nav-links{
+      position:fixed;top:76px;left:0;right:0;bottom:0;
+      background:var(--navy);
+      flex-direction:column;align-items:flex-start;
+      padding:24px 24px 30px;gap:6px;
+      transform:translateY(-8px);opacity:0;visibility:hidden;
+      transition:.28s var(--ease);
+      border-bottom:1px solid rgba(244,238,225,0.08);
+      overflow-y:auto;
+      height:0;
+    }
+    .nav-links.open{transform:translateY(0);opacity:1;visibility:visible;height:auto;}
+    .nav-links a{width:100%;padding:12px 4px;font-size:16px;}
+    .nav-toggle{display:flex;}
+    .nav-cta{order:5;text-align:center;margin-top:10px;}
+  }
+  @media (max-width:560px){
+    .nav-links{top:64px;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;min-height:100vh;min-height:100svh;
+    background:linear-gradient(180deg,#0F3538 0%, var(--navy) 55%, var(--navy-deep) 100%);
+    overflow:hidden;display:flex;align-items:center;
+    padding-top:76px;
+  }
+  @media (max-width:560px){
+    .hero{min-height:auto;padding-top:64px;}
+    .hero .wrap{padding-top:56px;padding-bottom:64px;}
+  }
+  .hero-bg{position:absolute;inset:0;width:100%;height:100%;opacity:0.95;}
+  .hero .wrap{position:relative;z-index:2;padding-top:60px;padding-bottom:90px;}
+  .hero-inner{max-width:640px;}
+  .hero h1{
+    font-size:clamp(38px,6vw,64px);
+    color:var(--sand);line-height:1.06;
+    margin-bottom:22px;
+  }
+  .hero h1 em{font-style:italic;color:var(--gold);}
+  .hero p{
+    color:rgba(244,238,225,0.78);font-size:17px;max-width:480px;margin-bottom:34px;
+  }
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{
+    padding:15px 28px;border-radius:100px;font-weight:700;font-size:14.5px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .2s var(--ease), background .2s, border-color .2s;
+  }
+  .btn-primary{background:var(--gold);color:var(--navy-deep);}
+  .btn-primary:hover{background:#f0b356;transform:translateY(-2px);}
+  .btn-ghost{border:1.5px solid rgba(244,238,225,0.35);color:var(--sand);}
+  .btn-ghost:hover{border-color:var(--sand);transform:translateY(-2px);}
+  .hero-stats{
+    display:flex;gap:36px;margin-top:56px;flex-wrap:wrap;
+  }
+  .hero-stats div{color:var(--sand);}
+  .hero-stats strong{
+    font-family:var(--font-display);font-size:28px;display:block;color:var(--gold);
+  }
+  .hero-stats span{font-size:12.5px;color:rgba(244,238,225,0.65);font-family:var(--font-mono);letter-spacing:.04em;}
+
+  @media (max-width:560px){
+    .hero p{font-size:15.5px;}
+    .btn-row{flex-direction:column;align-items:stretch;gap:12px;}
+    .btn{justify-content:center;padding:15px 22px;}
+    .hero-stats{gap:22px;margin-top:40px;}
+    .hero-stats strong{font-size:23px;}
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  section{padding:110px 0;}
+  .sec-head{max-width:620px;margin-bottom:60px;}
+  .sec-head h2{font-size:clamp(28px,4vw,42px);}
+  .sec-head p{color:#4b5c59;font-size:16px;margin-top:14px;}
+  .on-dark .sec-head h2{color:var(--sand);}
+  .on-dark .sec-head p{color:rgba(244,238,225,0.68);}
+  .sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+
+  @media (max-width:560px){
+    section{padding:64px 0;}
+    .sec-head{margin-bottom:36px;}
+  }
+
+  /* ---------- KEUNGGULAN ---------- */
+  .keunggulan{background:var(--sand);}
+  .feature-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:rgba(23,37,35,0.09);
+    border:1px solid rgba(23,37,35,0.09);
+  }
+  .feature-card{
+    background:var(--sand);padding:36px 30px;
+    transition:background .25s;
+  }
+  .feature-card:hover{background:#efe6d0;}
+  .feature-icon{
+    width:44px;height:44px;margin-bottom:22px;color:var(--coral);
+  }
+  .feature-card h3{font-size:19px;margin-bottom:10px;color:var(--ink);}
+  .feature-card p{font-size:14.5px;color:#57645f;}
+  @media (max-width:860px){.feature-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.feature-grid{grid-template-columns:1fr;}}
+
+  /* ---------- DESTINASI ---------- */
+  .destinasi{background:var(--navy);}
+  .dest-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:26px;
+  }
+  @media (max-width:980px){.dest-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.dest-grid{grid-template-columns:1fr;gap:20px;}}
+
+  .dest-card{
+    background:var(--paper);border-radius:18px;overflow:hidden;
+    display:flex;flex-direction:column;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
+  }
+  .dest-art{position:relative;aspect-ratio:4/3;background:var(--navy-deep);overflow:hidden;}
+  .dest-art svg{width:100%;height:100%;}
+  .price-tag{
+    position:absolute;top:14px;left:14px;
+    background:rgba(8,27,29,0.82);
+    backdrop-filter:blur(3px);
+    color:var(--sand);
+    padding:7px 13px;border-radius:100px;
+    font-family:var(--font-mono);font-size:11.5px;font-weight:500;
+    display:flex;align-items:baseline;gap:5px;
+  }
+  .price-tag b{color:var(--gold);font-size:13px;}
+  .stamp{
+    position:absolute;top:14px;right:14px;
+    width:56px;height:56px;border-radius:50%;
+    border:2px dashed rgba(251,248,241,0.85);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--paper);font-family:var(--font-mono);font-size:9px;
+    text-align:center;line-height:1.2;letter-spacing:.03em;
+    transform:scale(0) rotate(-18deg);
+    transition:transform .4s var(--ease);
+    background:rgba(226,105,75,0.35);
+    backdrop-filter:blur(2px);
+  }
+  .dest-card.liked .stamp{transform:scale(1) rotate(-18deg);}
+
+  .dest-body{padding:24px 24px 20px;flex:1;display:flex;flex-direction:column;}
+  .dest-loc{font-family:var(--font-mono);font-size:11.5px;color:var(--teal);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+  .dest-body h3{font-size:21px;margin-bottom:10px;}
+  .dest-body p.dest-desc{font-size:14px;color:#57645f;flex:1;}
+  .dest-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+  .dest-tags span{
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.02em;
+    background:var(--sand-dim);color:#4b5c59;padding:5px 10px;border-radius:100px;
+  }
+
+  .dest-actions{
+    display:flex;align-items:center;gap:6px;
+    margin-top:18px;padding-top:16px;border-top:1px solid #e7ddc7;
+  }
+  .action-btn{
+    display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:100px;
+    font-size:13.5px;font-weight:600;color:#57645f;
+    transition:background .2s, color .2s;
+  }
+  .action-btn:hover{background:#efe6d0;}
+  .action-btn svg{width:18px;height:18px;flex-shrink:0;}
+  .like-btn.liked{color:var(--coral);}
+  .like-btn.liked svg{fill:var(--coral);stroke:var(--coral);}
+  .comment-btn.open{color:var(--teal);}
+  .book-btn{
+    margin-left:auto;background:var(--navy);color:var(--sand);
+    padding:9px 16px;border-radius:100px;font-size:13px;font-weight:700;
+    transition:background .2s;
+  }
+  .book-btn:hover{background:var(--navy-deep);}
+
+  .comment-panel{
+    max-height:0;overflow:hidden;
+    transition:max-height .35s var(--ease);
+    border-top:0 solid #e7ddc7;
+  }
+  .comment-panel.open{max-height:420px;border-top-width:1px;}
+  .comment-inner{padding:18px 24px 22px;}
+  .comment-list{display:flex;flex-direction:column;gap:12px;margin-bottom:14px;max-height:180px;overflow-y:auto;}
+  .comment-item{font-size:13.5px;background:var(--sand);padding:10px 13px;border-radius:10px;}
+  .comment-item b{font-size:13px;color:var(--ink);}
+  .comment-item span{display:block;color:#5c6863;margin-top:3px;}
+  .comment-form{display:flex;gap:8px;}
+  .comment-form input{
+    flex:1;padding:10px 14px;border-radius:100px;border:1.5px solid #ddd0ac;
+    font-size:13.5px;font-family:inherit;background:var(--paper);
+  }
+  .comment-form input:focus{outline:none;border-color:var(--teal);}
+  .comment-form button{
+    background:var(--navy);color:var(--sand);padding:10px 18px;border-radius:100px;
+    font-size:13px;font-weight:700;flex-shrink:0;transition:background .2s;
+  }
+  .comment-form button:hover{background:var(--navy-deep);}
+
+  @media (max-width:560px){
+    .dest-body{padding:20px 20px 18px;}
+    .dest-actions{flex-wrap:wrap;}
+    .action-btn{padding:10px 12px;}
+    .book-btn{margin-left:0;width:100%;text-align:center;order:5;margin-top:4px;}
+    .comment-form{flex-direction:column;}
+    .comment-form button{padding:12px 18px;}
+  }
+
+  /* ---------- HARGA / PAKET ---------- */
+  .harga{background:var(--sand);}
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
+  @media (max-width:900px){.price-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}}
+  .price-card{
+    background:var(--paper);border:1.5px solid #e7ddc7;border-radius:20px;
+    padding:34px 30px;display:flex;flex-direction:column;
+    position:relative;transition:transform .25s var(--ease), box-shadow .25s;
+  }
+  .price-card:hover{transform:translateY(-6px);box-shadow:0 24px 44px -24px rgba(23,37,35,0.35);}
+  .price-card.featured{
+    background:var(--navy);border-color:var(--navy);color:var(--sand);
+    transform:scale(1.03);
+  }
+  .price-card.featured:hover{transform:scale(1.03) translateY(-6px);}
+  .price-badge{
+    position:absolute;top:-13px;left:30px;
+    background:var(--coral);color:var(--sand);
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    padding:6px 14px;border-radius:100px;font-weight:600;
+  }
+  .price-card h3{font-size:21px;margin-bottom:6px;}
+  .price-card .price-sub{font-size:13.5px;color:#5c6863;margin-bottom:22px;}
+  .price-card.featured .price-sub{color:rgba(244,238,225,0.65);}
+  .price-amount{font-family:var(--font-display);font-size:38px;color:var(--navy);margin-bottom:2px;}
+  .price-card.featured .price-amount{color:var(--gold);}
+  .price-unit{font-family:var(--font-mono);font-size:12px;color:#5c6863;margin-bottom:24px;}
+  .price-card.featured .price-unit{color:rgba(244,238,225,0.6);}
+  .price-list{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;flex:1;}
+  .price-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#3d4a47;list-style:none;}
+  .price-card.featured .price-list li{color:rgba(244,238,225,0.88);}
+  .price-list svg{width:17px;height:17px;flex-shrink:0;margin-top:2px;color:var(--teal);}
+  .price-card.featured .price-list svg{color:var(--gold);}
+  .price-card .btn-primary{justify-content:center;width:100%;}
+  .price-card.featured .btn-primary{background:var(--gold);color:var(--navy-deep);}
+  .price-card:not(.featured) .btn-cta{
+    background:var(--navy);color:var(--sand);
+    width:100%;justify-content:center;
+  }
+  .price-card:not(.featured) .btn-cta:hover{background:var(--navy-deep);}
+  .price-note{text-align:center;font-size:13.5px;color:#5c6863;margin-top:34px;}
+
+  /* ---------- BOOKING FORM ---------- */
+  .booking{background:var(--navy-deep);}
+  .booking-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:60px;align-items:start;}
+  @media (max-width:900px){.booking-grid{grid-template-columns:1fr;gap:36px;}}
+  .booking-info p{color:rgba(244,238,225,0.68);font-size:15px;margin-bottom:22px;}
+  .booking-points{display:flex;flex-direction:column;gap:16px;}
+  .booking-points div{display:flex;gap:12px;align-items:flex-start;}
+  .booking-points svg{width:20px;height:20px;flex-shrink:0;color:var(--gold);margin-top:2px;}
+  .booking-points span{color:rgba(244,238,225,0.82);font-size:14.5px;}
+  .booking-form{
+    background:var(--sand);border-radius:20px;padding:34px;
+    display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  }
+  @media (max-width:560px){.booking-form{grid-template-columns:1fr;padding:26px 22px;}}
+  .booking-form .field-full{grid-column:1/-1;}
+  .booking-form label{
+    display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+    text-transform:uppercase;color:#5c6863;margin-bottom:7px;
+  }
+  .booking-form input,
+  .booking-form select,
+  .booking-form textarea{
+    width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #ddd0ac;
+    font-size:14px;font-family:inherit;background:var(--paper);color:var(--ink);
+  }
+  .booking-form textarea{resize:vertical;min-height:80px;}
+  .booking-form input:focus,
+  .booking-form select:focus,
+  .booking-form textarea:focus{outline:none;border-color:var(--teal);}
+  .booking-form .btn-primary{
+    grid-column:1/-1;justify-content:center;border:none;margin-top:4px;
+  }
+  .booking-status{
+    grid-column:1/-1;font-size:13.5px;font-family:var(--font-mono);
+    padding:10px 14px;border-radius:10px;display:none;
+  }
+  .booking-status.show{display:block;}
+  .booking-status.ok{background:rgba(79,166,154,0.15);color:#1f5951;}
+  .booking-status.err{background:rgba(226,105,75,0.15);color:#8a3520;}
+
+  /* ---------- TENTANG ---------- */
+  .tentang{background:var(--paper);}
+  .tentang-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:70px;align-items:center;}
+  @media (max-width:900px){.tentang-grid{grid-template-columns:1fr;gap:50px;}}
+  .tentang-text p{color:#4b5c59;font-size:16px;margin-bottom:18px;}
+  .tentang-stats{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px;}
+  @media (max-width:420px){.tentang-stats{grid-template-columns:1fr;}}
+  .tentang-stats div{border-left:2px solid var(--coral);padding-left:16px;}
+  .tentang-stats strong{font-family:var(--font-display);font-size:30px;display:block;color:var(--navy);}
+  .tentang-stats span{font-size:13px;color:#5c6863;}
+  .tentang-art{border-radius:20px;overflow:hidden;background:var(--navy);}
+  .tentang-art svg{width:100%;height:100%;}
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{
+    background:linear-gradient(120deg,var(--coral),var(--gold));
+    padding:70px 0;text-align:center;
+  }
+  .cta-band h2{font-size:clamp(26px,4vw,38px);color:var(--navy-deep);margin-bottom:10px;}
+  .cta-band p{color:rgba(8,27,29,0.75);margin-bottom:28px;font-size:15.5px;}
+  .cta-band .btn-primary{background:var(--navy-deep);color:var(--sand);}
+  .cta-band .btn-primary:hover{background:#122f31;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--navy-deep);color:rgba(244,238,225,0.7);padding:70px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:50px;}
+  @media (max-width:800px){.footer-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.footer-grid{grid-template-columns:1fr;}}
+  .footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .footer-brand span{font-family:var(--font-display);font-size:18px;color:var(--sand);}
+  footer h4{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--sand);margin-bottom:16px;}
+  footer li{margin-bottom:10px;font-size:14px;}
+  footer a:hover{color:var(--sand);}
+  .footer-bottom{
+    border-top:1px solid rgba(244,238,225,0.1);padding-top:24px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-size:13px;font-family:var(--font-mono);
+  }
+  @media (max-width:560px){
+    footer{padding:50px 0 24px;}
+    .footer-grid{gap:32px;padding-bottom:34px;}
+    .footer-bottom{flex-direction:column;text-align:center;}
+  }
+  .social-row{display:flex;gap:14px;}
+  .social-row a{width:34px;height:34px;border-radius:50%;border:1px solid rgba(244,238,225,0.25);display:flex;align-items:center;justify-content:center;transition:.2s;}
+  .social-row a:hover{background:var(--gold);border-color:var(--gold);color:var(--navy-deep);}
+  .social-row svg{width:16px;height:16px;}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="wrap">
+    <a href="#top" class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="19" stroke="#E7A23A" stroke-width="1.4"/>
+        <path d="M6 22c3-4 6-4 9 0s6 4 9 0 6-4 9 0" stroke="#F4EEE1" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <path d="M6 27c3-4 6-4 9 0s6 4 9 0 6-4 9 0" stroke="#4FA69A" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="brand-name">Ombak Nusantara</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#top">Beranda</a></li>
+      <li><a href="#keunggulan">Keunggulan</a></li>
+      <li><a href="#destinasi">Destinasi Bali</a></li>
+      <li><a href="#harga">Harga Paket</a></li>
+      <li><a href="#tentang">Tentang Kami</a></li>
+      <li><a href="#booking" class="nav-cta">Rencanakan Perjalanan</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="hero-bg" viewBox="0 0 1400 800" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E7A23A" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#E7A23A" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="wave1" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0%" stop-color="#123F42"/>
+        <stop offset="100%" stop-color="#0D2B2E"/>
+      </linearGradient>
+    </defs>
+    <circle cx="1120" cy="180" r="220" fill="url(#sunGlow)"/>
+    <circle cx="1120" cy="180" r="70" fill="#E7A23A" opacity="0.85"/>
+    <path d="M0 520 L120 470 L260 540 L400 480 L560 545 L720 490 L900 550 L1080 485 L1250 540 L1400 500 L1400 800 L0 800 Z" fill="#0F3538"/>
+    <path d="M0 600 L150 560 L320 610 L480 555 L660 615 L840 560 L1020 615 L1200 565 L1400 610 L1400 800 L0 800 Z" fill="url(#wave1)"/>
+    <path d="M0 680 Q 350 630 700 680 T 1400 680 L1400 800 L0 800 Z" fill="#081B1D"/>
+  </svg>
+  <div class="wrap">
+    <div class="hero-inner">
+      <p class="eyebrow">Travel Agency Terpercaya Sejak 2014</p>
+      <h1 class="reveal">Jelajahi Keindahan <em>Bali</em> Tanpa Batas</h1>
+      <p class="reveal">Dari sawah berundak Ubud hingga tebing karang Uluwatu — kami rancang perjalanan Bali yang sesuai dengan cerita Anda, ditemani pemandu lokal yang benar-benar mengenal setiap sudutnya, dengan harga yang jelas sejak awal.</p>
+      <div class="btn-row reveal">
+        <a href="#destinasi" class="btn btn-primary">Lihat Destinasi</a>
+        <a href="#harga" class="btn btn-ghost">Lihat Harga Paket</a>
+      </div>
+      <div class="hero-stats reveal">
+        <div><strong>1,5k+</strong><span>Wisatawan Terbantu</span></div>
+        <div><strong>6</strong><span>Rute Favorit di Bali</span></div>
+        <div><strong>4.9/5</strong><span>Rating Pelanggan</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="keunggulan" id="keunggulan">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Keunggulan Kami</p>
+      <h2>Kenapa Wisatawan Memilih Ombak Nusantara</h2>
+      <p>Enam alasan sederhana yang membuat perjalanan Bali Anda lebih tenang dari awal sampai pulang.</p>
+    </div>
+  </div>
+  <div class="wrap" style="padding:0;">
+    <div class="feature-grid reveal">
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M17 6H9.5a3 3 0 000 6h5a3 3 0 010 6H6"/></svg>
+        <h3>Harga Transparan</h3>
+        <p>Semua paket punya rincian harga yang jelas di halaman ini, tanpa biaya tersembunyi di akhir.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        <h3>Pemandu Lokal Berpengalaman</h3>
+        <p>Dipandu oleh pemandu bersertifikat asli Bali yang mengenal setiap sudut pulau.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>
+        <h3>Itinerary Fleksibel</h3>
+        <p>Susun ulang rencana perjalanan sesuai waktu dan minat Anda kapan saja, tanpa biaya tambahan.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c-4-3-8-6.5-8-11a8 8 0 0116 0c0 4.5-4 8-8 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <h3>Dukungan 24/7</h3>
+        <p>Tim kami siap dihubungi kapan saja selama perjalanan Anda di Bali berlangsung.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
+        <h3>Pembayaran Aman</h3>
+        <p>Setiap transaksi terlindungi lewat sistem pembayaran tepercaya, DP ringan tersedia.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 17.3l-6.2 3.6 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7z"/></svg>
+        <h3>Ulasan Terverifikasi</h3>
+        <p>Ribuan cerita nyata dari wisatawan yang bisa dibaca dan dikomentari siapa saja.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="destinasi on-dark" id="destinasi">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Destinasi Pilihan di Bali</p>
+      <h2>Enam Sudut Bali yang Selalu Dirindukan</h2>
+      <p>Setiap destinasi sudah termasuk perkiraan harga per orang. Sukai destinasi favorit Anda dan tinggalkan komentar untuk wisatawan lain.</p>
+    </div>
+
+    <div class="dest-grid">
+
+      <article class="dest-card reveal" data-likes="482" data-dest="ubud">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gUbud" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a7a6e"/><stop offset="100%" stop-color="#1c4a42"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gUbud)"/>
+            <circle cx="320" cy="70" r="34" fill="#E7A23A" opacity="0.9"/>
+            <path d="M0 230 L400 230 L400 300 L0 300 Z" fill="#173d37"/>
+            <path d="M0 230 Q40 215 80 230 T160 230 T240 230 T320 230 T400 230 L400 260 Q360 245 320 260 T240 260 T160 260 T80 260 T0 260 Z" fill="#22564d"/>
+            <g fill="#0f2e2a">
+              <rect x="150" y="120" width="10" height="110"/>
+              <polygon points="140,120 160,120 150,95"/>
+              <rect x="145" y="95" width="10" height="14"/>
+              <polygon points="137,95 163,95 150,78"/>
+              <rect x="185" y="140" width="10" height="90"/>
+              <polygon points="175,140 195,140 185,118"/>
+              <rect x="105" y="150" width="10" height="80"/>
+              <polygon points="95,150 115,150 105,130"/>
+            </g>
+          </svg>
+          <div class="price-tag">mulai <b>Rp350rb</b></div>
+          <div class="stamp">UBUD<br>BALI</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Gianyar, Bali</p>
+          <h3>Ubud</h3>
+          <p class="dest-desc">Jantung budaya Bali dengan sawah berundak Tegallalang, Monkey Forest, pasar seni, dan galeri lukis di tengah udara pegunungan yang sejuk.</p>
+          <div class="dest-tags"><span>Sawah &amp; Alam</span><span>Budaya</span><span>4–5 Jam</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">482</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">2</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list">
+                <div class="comment-item"><b>Rani S.</b><span>Jatiluwih sepagi mungkin, sepi dan sejuk banget!</span></div>
+                <div class="comment-item"><b>Dimas P.</b><span>Pemandunya sabar banget jelasin sejarah pura.</span></div>
+              </div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="dest-card reveal" data-likes="356" data-dest="uluwatu">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gUlu" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2d6f7a"/><stop offset="100%" stop-color="#123844"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gUlu)"/>
+            <circle cx="90" cy="70" r="30" fill="#E7A23A" opacity="0.85"/>
+            <path d="M0 230 L0 170 L60 150 L110 190 L160 160 L400 160 L400 230 Z" fill="#0e2e35"/>
+            <path d="M0 230 Q80 215 160 230 T320 230 T400 225 L400 300 L0 300 Z" fill="#164450"/>
+            <rect x="215" y="120" width="10" height="45"/>
+            <polygon points="205,120 225,120 215,100" fill="#0e2e35"/>
+          </svg>
+          <div class="price-tag">mulai <b>Rp300rb</b></div>
+          <div class="stamp">ULUWATU<br>BALI</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Badung, Bali</p>
+          <h3>Uluwatu</h3>
+          <p class="dest-desc">Pura yang berdiri di tepi tebing kapur setinggi 70 meter menghadap Samudra Hindia, dengan Tari Kecak saat matahari terbenam.</p>
+          <div class="dest-tags"><span>Tebing &amp; Pura</span><span>Sunset</span><span>3–4 Jam</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">356</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">1</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list">
+                <div class="comment-item"><b>Yoga W.</b><span>Tari Kecak saat sunset bikin merinding, wajib nonton.</span></div>
+              </div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="dest-card reveal" data-likes="509" data-dest="nusa-penida">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gPenida" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e8f92"/><stop offset="100%" stop-color="#0c4c52"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gPenida)"/>
+            <path d="M0 240 Q40 230 80 240 T160 235 T240 240 T320 233 T400 240 L400 300 L0 300 Z" fill="#0a3a3e" opacity="0.7"/>
+            <path d="M60 240 L140 130 L220 240 Z" fill="#e9e2cf"/>
+            <path d="M60 240 L140 130 L110 240 Z" fill="#d8cfb6"/>
+          </svg>
+          <div class="price-tag">mulai <b>Rp650rb</b></div>
+          <div class="stamp">NUSA<br>PENIDA</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Klungkung, Bali</p>
+          <h3>Nusa Penida</h3>
+          <p class="dest-desc">Kelingking Beach yang ikonik, tebing Angel's Billabong, dan snorkeling bersama manta ray di perairan jernih seberang Bali.</p>
+          <div class="dest-tags"><span>Pulau &amp; Laut</span><span>Snorkeling</span><span>Full Day</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">509</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">1</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list">
+                <div class="comment-item"><b>Sari A.</b><span>Naik-turun tangga Kelingking capek tapi terbayar lunas.</span></div>
+              </div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="dest-card reveal" data-likes="298" data-dest="kintamani">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gKintamani" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4a3560"/><stop offset="100%" stop-color="#1f1a3a"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gKintamani)"/>
+            <circle cx="200" cy="130" r="60" fill="#E7A23A" opacity="0.75"/>
+            <polygon points="60,240 160,110 260,240" fill="#241c3f"/>
+            <polygon points="180,240 260,90 340,240" fill="#1a1530"/>
+            <path d="M255 100 q10 -14 4 -26" stroke="#cfc6da" stroke-width="4" fill="none" opacity="0.5" stroke-linecap="round"/>
+            <ellipse cx="200" cy="255" rx="150" ry="30" fill="#2a4c5f"/>
+          </svg>
+          <div class="price-tag">mulai <b>Rp400rb</b></div>
+          <div class="stamp">KINTAMANI<br>BALI</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Bangli, Bali</p>
+          <h3>Kintamani</h3>
+          <p class="dest-desc">Pemandangan Gunung dan Danau Batur dari dataran tinggi sejuk, dilengkapi sarapan prasmanan dengan panorama kaldera.</p>
+          <div class="dest-tags"><span>Gunung &amp; Danau</span><span>Udara Sejuk</span><span>5–6 Jam</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">298</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">1</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list">
+                <div class="comment-item"><b>Agus T.</b><span>Sarapan sambil lihat Danau Batur, susananya tenang banget.</span></div>
+              </div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="dest-card reveal" data-likes="241" data-dest="seminyak">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gSemi" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e3a9a0"/><stop offset="100%" stop-color="#c97a6d"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gSemi)"/>
+            <path d="M0 210 L400 210 L400 300 L0 300 Z" fill="#f0c4b8"/>
+            <path d="M0 195 Q80 175 160 195 T320 195 T400 190 L400 210 L0 210 Z" fill="#2a7a8c"/>
+            <g fill="#3a2a24">
+              <rect x="100" y="230" width="4" height="30"/>
+              <ellipse cx="102" cy="228" rx="18" ry="6"/>
+              <rect x="300" y="235" width="4" height="25"/>
+              <ellipse cx="302" cy="233" rx="16" ry="5"/>
+            </g>
+          </svg>
+          <div class="price-tag">mulai <b>Rp250rb</b></div>
+          <div class="stamp">SEMINYAK<br>BALI</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Badung, Bali</p>
+          <h3>Seminyak</h3>
+          <p class="dest-desc">Pantai berpasir kecokelatan dengan deretan beach club dan restoran tepi laut, cocok untuk santai sambil menyaksikan senja.</p>
+          <div class="dest-tags"><span>Pantai</span><span>Beach Club</span><span>3 Jam</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">241</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">0</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list"></div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar pertama..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="dest-card reveal" data-likes="187" data-dest="tanah-lot">
+        <div class="dest-art">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+            <defs><linearGradient id="gTanahLot" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5a7a5f"/><stop offset="100%" stop-color="#293f2c"/></linearGradient></defs>
+            <rect width="400" height="300" fill="url(#gTanahLot)"/>
+            <circle cx="80" cy="70" r="30" fill="#E7A23A" opacity="0.85"/>
+            <path d="M0 240 L400 240 L400 300 L0 300 Z" fill="#1c2c1f"/>
+            <path d="M150 240 Q160 200 190 200 Q220 200 230 240 Z" fill="#0f1e12"/>
+            <g fill="#213325">
+              <rect x="178" y="150" width="24" height="52"/>
+              <polygon points="170,150 210,150 190,130"/>
+              <rect x="183" y="130" width="14" height="20"/>
+              <polygon points="177,130 203,130 190,112"/>
+            </g>
+          </svg>
+          <div class="price-tag">mulai <b>Rp275rb</b></div>
+          <div class="stamp">TANAH<br>LOT</div>
+        </div>
+        <div class="dest-body">
+          <p class="dest-loc">Tabanan, Bali</p>
+          <h3>Tanah Lot</h3>
+          <p class="dest-desc">Pura ikonik yang berdiri di atas batu karang di tengah laut, paling memukau saat matahari terbenam berpadu air pasang.</p>
+          <div class="dest-tags"><span>Pura &amp; Laut</span><span>Sunset</span><span>2–3 Jam</span></div>
+          <div class="dest-actions">
+            <button class="action-btn like-btn" data-action="like">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 8.6c0 4.4-8.8 10.4-8.8 10.4S3.2 13 3.2 8.6a5 5 0 019.2-2.8 5 5 0 018.4 2.8z"/></svg>
+              <span class="like-count">187</span>
+            </button>
+            <button class="action-btn comment-btn" data-action="comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1.2-5.1A8.4 8.4 0 013.4 11 8.5 8.5 0 0112 3a8.5 8.5 0 019 8.5z"/></svg>
+              <span class="comment-count">1</span> Komentar
+            </button>
+            <a href="#booking" class="action-btn book-btn">Pesan</a>
+          </div>
+          <div class="comment-panel">
+            <div class="comment-inner">
+              <div class="comment-list">
+                <div class="comment-item"><b>Nadia F.</b><span>Datang 1 jam sebelum sunset biar dapat spot foto terbaik.</span></div>
+              </div>
+              <form class="comment-form">
+                <input type="text" placeholder="Tulis komentar..." required>
+                <button type="submit">Kirim</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="harga" id="harga">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <p class="eyebrow">Paket &amp; Harga</p>
+      <h2>Pilih Paket yang Sesuai Kebutuhan Anda</h2>
+      <p>Harga sudah termasuk mobil ber-AC, sopir merangkap pemandu, BBM, parkir, dan air mineral. Tiket masuk destinasi dibayar terpisah di lokasi.</p>
+    </div>
+
+    <div class="price-grid reveal">
+
+      <div class="price-card">
+        <h3>Half Day Trip</h3>
+        <p class="price-sub">Cocok untuk 1–2 destinasi berdekatan</p>
+        <div class="price-amount">Rp 350rb</div>
+        <div class="price-unit">/ orang &middot; min. 2 orang &middot; 4–5 jam</div>
+        <ul class="price-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Mobil ber-AC &amp; sopir pribadi</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>1 destinasi pilihan</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Air mineral selama perjalanan</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Tanpa makan siang</li>
+        </ul>
+        <a href="#kontak" class="btn btn-cta">Pilih Paket</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="price-badge">Paling Populer</span>
+        <h3>Full Day Trip</h3>
+        <p class="price-sub">Kombinasi 2–3 destinasi dalam sehari</p>
+        <div class="price-amount">Rp 600rb</div>
+        <div class="price-unit">/ orang &middot; min. 2 orang &middot; 8–10 jam</div>
+        <ul class="price-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Mobil ber-AC &amp; sopir merangkap pemandu</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>2–3 destinasi sesuai rute</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Makan siang di restoran lokal</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Air mineral &amp; dokumentasi foto</li>
+        </ul>
+        <a href="#kontak" class="btn btn-primary">Pilih Paket</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Private Custom</h3>
+        <p class="price-sub">Itinerary dirancang khusus untuk Anda</p>
+        <div class="price-amount">Rp 1,2jt</div>
+        <div class="price-unit">/ orang &middot; min. 2 orang &middot; fleksibel</div>
+        <ul class="price-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Mobil pribadi &amp; pemandu personal</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Rute &amp; jadwal bebas ditentukan</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Makan siang &amp; malam termasuk</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>Prioritas layanan &amp; dukungan 24/7</li>
+        </ul>
+        <a href="#kontak" class="btn btn-cta">Pilih Paket</a>
+      </div>
+
+    </div>
+    <p class="price-note reveal">Harga dapat berubah menyesuaikan musim liburan dan jumlah peserta. Hubungi tim kami untuk penawaran rombongan &amp; grup keluarga.</p>
+  </div>
+</section>
+
+<section class="tentang" id="tentang">
+  <div class="wrap">
+    <div class="tentang-grid">
+      <div class="tentang-text reveal">
+        <p class="eyebrow">Tentang Kami</p>
+        <h2 style="font-size:clamp(26px,3.6vw,36px);margin-bottom:20px;">Dimulai dari Kecintaan pada Bali</h2>
+        <p>Ombak Nusantara Travel berdiri sejak 2014, lahir dari sekelompok pejalan yang percaya bahwa setiap sudut Bali punya cerita yang layak dijelajahi dengan cara yang tepat, bukan sekadar terburu-buru dari satu titik foto ke titik foto lain.</p>
+        <p>Kami bekerja sama dengan pemandu lokal di setiap destinasi Bali, memastikan perjalanan Anda bukan hanya indah dilihat, tapi juga bermakna dan menghormati adat serta budaya setempat.</p>
+        <div class="tentang-stats">
+          <div><strong>10+</strong><span>Tahun Pengalaman</span></div>
+          <div><strong>6</strong><span>Rute Favorit di Bali</span></div>
+          <div><strong>12.400</strong><span>Wisatawan Puas</span></div>
+          <div><strong>4.9</strong><span>Rating Rata-rata</span></div>
+        </div>
+      </div>
+      <div class="tentang-art reveal">
+        <svg viewBox="0 0 400 460" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="gAbout" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#164448"/><stop offset="100%" stop-color="#081B1D"/></linearGradient></defs>
+          <rect width="400" height="460" fill="url(#gAbout)"/>
+          <circle cx="300" cy="90" r="46" fill="#E7A23A" opacity="0.8"/>
+          <path d="M0 330 Q60 300 120 330 T240 330 T360 325 T400 330 L400 460 L0 460 Z" fill="#0f3538"/>
+          <path d="M0 370 Q80 345 160 370 T320 368 T400 372 L400 460 L0 460 Z" fill="#0b2a2c"/>
+          <g stroke="#F4EEE1" stroke-width="2" fill="none" opacity="0.75">
+            <path d="M40 250c10-8 25-8 35 0"/>
+            <path d="M40 260c10-8 25-8 35 0"/>
+          </g>
+          <circle cx="57" cy="235" r="12" fill="#E2694B" opacity="0.9"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="kontak">
+  <div class="wrap">
+    <h2 class="reveal">Siap Memulai Petualangan Bali Anda?</h2>
+    <p class="reveal">Konsultasikan rencana perjalanan dan pilih paket harga yang sesuai, gratis tanpa komitmen.</p>
+    <a href="https://wa.me/6281200000000" class="btn btn-primary reveal">Hubungi Tim Kami di WhatsApp</a>
+  </div>
+</section>
+
+<section class="booking on-dark" id="booking">
+  <div class="wrap">
+    <div class="booking-grid">
+      <div class="booking-info reveal">
+        <p class="eyebrow">Form Pemesanan</p>
+        <h2 style="color:var(--sand);font-size:clamp(26px,3.4vw,34px);margin-bottom:16px;">Isi Data, Tim Kami yang Hubungi Anda</h2>
+        <p>Setelah dikirim, permintaan Anda langsung tersimpan di sistem kami dan tim akan menghubungi lewat WhatsApp dalam 1x24 jam untuk konfirmasi jadwal dan pembayaran.</p>
+        <div class="booking-points">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Tanpa DP untuk konsultasi &amp; penjadwalan awal</span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Bisa ubah destinasi atau tanggal sebelum H-3</span></div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span>Data Anda tersimpan aman di database kami</span></div>
+        </div>
+      </div>
+      <form class="booking-form reveal" id="bookingForm">
+        <div>
+          <label for="bkName">Nama Lengkap</label>
+          <input id="bkName" name="name" type="text" placeholder="Nama Anda" required>
+        </div>
+        <div>
+          <label for="bkPhone">No. WhatsApp</label>
+          <input id="bkPhone" name="phone" type="tel" placeholder="08xxxxxxxxxx" required>
+        </div>
+        <div>
+          <label for="bkPackage">Pilih Paket</label>
+          <select id="bkPackage" name="package" required>
+            <option value="" disabled selected>Pilih paket</option>
+            <option value="Half Day Trip">Half Day Trip — Rp350rb/orang</option>
+            <option value="Full Day Trip">Full Day Trip — Rp600rb/orang</option>
+            <option value="Private Custom">Private Custom — Rp1,2jt/orang</option>
+          </select>
+        </div>
+        <div>
+          <label for="bkDate">Tanggal Perjalanan</label>
+          <input id="bkDate" name="date" type="date" required>
+        </div>
+        <div class="field-full">
+          <label for="bkNote">Catatan (opsional)</label>
+          <textarea id="bkNote" name="note" placeholder="Destinasi yang diminati, jumlah orang, dll."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Kirim Permintaan Booking</button>
+        <p class="booking-status" id="bookingStatus"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="19" stroke="#E7A23A" stroke-width="1.4"/>
+            <path d="M6 22c3-4 6-4 9 0s6 4 9 0 6-4 9 0" stroke="#F4EEE1" stroke-width="2" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span>Ombak Nusantara</span>
+        </div>
+        <p style="font-size:14px;max-width:260px;">Teman perjalanan Anda menjelajahi keindahan Bali, dari sawah Ubud hingga tebing Uluwatu.</p>
+      </div>
+      <div>
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#keunggulan">Keunggulan</a></li>
+          <li><a href="#destinasi">Destinasi Bali</a></li>
+          <li><a href="#harga">Harga Paket</a></li>
+          <li><a href="#tentang">Tentang Kami</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <ul>
+          <li>hello@ombaknusantara.id</li>
+          <li>+62 812 0000 0000</li>
+          <li>Denpasar, Bali</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ikuti Kami</h4>
+        <div class="social-row">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 9h3V6h-3a4 4 0 00-4 4v2H7v3h3v6h3v-6h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3v10.5a3.5 3.5 0 11-3-3.46M15 7a5 5 0 004 2V6a5 5 0 01-4-3z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Ombak Nusantara Travel. Semua hak dilindungi.</span>
+      <span>Dibuat dengan &hearts; untuk pejalan Bali</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Comment panel open/close (UI only — data wiring is in the Firebase module below)
+  document.querySelectorAll('.comment-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.dest-card');
+      const panel = card.querySelector('.comment-panel');
+      const isOpen = panel.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+    });
+  });
+</script>
+
+<!-- ============================================================
+     INTEGRASI FIREBASE (Firestore + Analytics)
+     Isi window.FIREBASE_CONFIG di <head> dengan config asli Anda
+     sebelum bagian ini bisa berfungsi.
+     ============================================================ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, updateDoc, increment,
+    collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+  import { getAnalytics, logEvent, isSupported } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+
+  const cfg = window.FIREBASE_CONFIG;
+  const isConfigured = cfg && cfg.apiKey && !cfg.apiKey.startsWith("GANTI");
+
+  if (!isConfigured) {
+    console.warn("[Firebase] Belum dikonfigurasi — lengkapi window.FIREBASE_CONFIG di <head>. Like, komentar, dan form booking akan bekerja secara lokal saja (tidak tersimpan permanen) sampai config diisi.");
+  }
+
+  let db = null, analytics = null;
+  if (isConfigured) {
+    const app = initializeApp(cfg);
+    db = getFirestore(app);
+    isSupported().then(ok => { if (ok) analytics = getAnalytics(app); });
+  }
+
+  const track = (name, params) => { if (analytics) logEvent(analytics, name, params); };
+
+  // ---------- LIKES (per destinasi, tersimpan di koleksi "destinations") ----------
+  document.querySelectorAll('.dest-card').forEach(card => {
+    const destId = card.dataset.dest;
+    const likeBtn = card.querySelector('.like-btn');
+    const countEl = likeBtn.querySelector('.like-count');
+    const seedLikes = parseInt(card.dataset.likes, 10) || 0;
+
+    if (db && destId) {
+      const destRef = doc(db, 'destinations', destId);
+      // Sinkron realtime: kalau dokumen belum ada, buat dengan nilai awal.
+      getDoc(destRef).then(snap => {
+        if (!snap.exists()) {
+          setDoc(destRef, { likes: seedLikes, name: destId }, { merge: true });
+        }
+      });
+      onSnapshot(destRef, snap => {
+        if (snap.exists() && typeof snap.data().likes === 'number') {
+          countEl.textContent = snap.data().likes;
+        }
+      });
+
+      likeBtn.addEventListener('click', () => {
+        const alreadyLiked = likeBtn.classList.toggle('liked');
+        card.classList.toggle('liked', alreadyLiked);
+        updateDoc(destRef, { likes: increment(alreadyLiked ? 1 : -1) })
+          .catch(err => console.error('Gagal update like:', err));
+        track('like_destination', { destination: destId, liked: alreadyLiked });
+      });
+    } else {
+      // Fallback tanpa Firebase: hitung di browser saja.
+      likeBtn.addEventListener('click', () => {
+        const liked = likeBtn.classList.toggle('liked');
+        card.classList.toggle('liked', liked);
+        let count = parseInt(countEl.textContent, 10);
+        countEl.textContent = liked ? count + 1 : count - 1;
+      });
+    }
+  });
+
+  // ---------- KOMENTAR (subkoleksi "destinations/{id}/comments") ----------
+  document.querySelectorAll('.dest-card').forEach(card => {
+    const destId = card.dataset.dest;
+    const form = card.querySelector('.comment-form');
+    const list = card.querySelector('.comment-list');
+    const countEl = card.querySelector('.comment-count');
+    if (!form || !destId) return;
+
+    if (db) {
+      const commentsRef = collection(db, 'destinations', destId, 'comments');
+      const q = query(commentsRef, orderBy('createdAt', 'asc'), limit(50));
+      onSnapshot(q, snap => {
+        list.innerHTML = '';
+        snap.forEach(docSnap => {
+          const c = docSnap.data();
+          const item = document.createElement('div');
+          item.className = 'comment-item';
+          item.innerHTML = '<b></b><span></span>';
+          item.querySelector('b').textContent = c.name || 'Pengunjung';
+          item.querySelector('span').textContent = c.text || '';
+          list.appendChild(item);
+        });
+        list.scrollTop = list.scrollHeight;
+        countEl.textContent = snap.size;
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = form.querySelector('input');
+        const text = input.value.trim();
+        if (!text) return;
+        try {
+          await addDoc(commentsRef, { name: 'Pengunjung', text, createdAt: serverTimestamp() });
+          track('post_comment', { destination: destId });
+          input.value = '';
+        } catch (err) {
+          console.error('Gagal kirim komentar:', err);
+        }
+      });
+    } else {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = form.querySelector('input');
+        const text = input.value.trim();
+        if (!text) return;
+        const item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = '<b>Anda</b><span></span>';
+        item.querySelector('span').textContent = text;
+        list.appendChild(item);
+        list.scrollTop = list.scrollHeight;
+        countEl.textContent = parseInt(countEl.textContent, 10) + 1;
+        input.value = '';
+      });
+    }
+  });
+
+  // ---------- BOOKING FORM (koleksi "bookings") ----------
+  const bookingForm = document.getElementById('bookingForm');
+  const bookingStatus = document.getElementById('bookingStatus');
+  bookingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(bookingForm).entries());
+    bookingStatus.className = 'booking-status show';
+    bookingStatus.textContent = 'Mengirim...';
+
+    if (!db) {
+      bookingStatus.classList.add('err');
+      bookingStatus.textContent = 'Firebase belum dikonfigurasi — permintaan belum bisa disimpan. Hubungi kami langsung via WhatsApp untuk sementara.';
+      return;
+    }
+    try {
+      await addDoc(collection(db, 'bookings'), {
+        ...data,
+        status: 'baru',
+        createdAt: serverTimestamp()
+      });
+      track('booking_submit', { package: data.package });
+      bookingStatus.classList.remove('err');
+      bookingStatus.classList.add('ok');
+      bookingStatus.textContent = 'Terkirim! Tim kami akan menghubungi Anda lewat WhatsApp dalam 1x24 jam.';
+      bookingForm.reset();
+    } catch (err) {
+      console.error('Gagal kirim booking:', err);
+      bookingStatus.classList.remove('ok');
+      bookingStatus.classList.add('err');
+      bookingStatus.textContent = 'Gagal mengirim, silakan coba lagi atau hubungi kami via WhatsApp.';
+    }
+  });
+
+  if (analytics === null && isConfigured) {
+    // Analytics diaktifkan async setelah isSupported() resolve; tidak memblokir fitur lain.
+  }
+</script>
+
+</body>
+</html>
