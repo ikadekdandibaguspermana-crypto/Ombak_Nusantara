@@ -111,6 +111,8 @@
     background:var(--gold);color:var(--navy-deep);
     padding:11px 22px;border-radius:100px;
     font-weight:700;font-size:14px;
+    display:inline-flex;align-items:center;justify-content:center;
+    text-align:center;white-space:nowrap;
     transition:transform .2s var(--ease), background .2s;
   }
   .nav-cta:hover{background:#f0b356;transform:translateY(-1px);}
@@ -163,7 +165,7 @@
     .nav-links.open{transform:translateY(0);opacity:1;visibility:visible;height:auto;}
     .nav-links a{width:100%;padding:12px 4px;font-size:16px;}
     .nav-toggle{display:flex;}
-    .nav-cta{order:5;text-align:center;margin-top:10px;}
+    .nav-cta{order:5;text-align:center;margin-top:10px;width:100%;white-space:normal;}
   }
   @media (max-width:560px){
     .nav-links{top:64px;}
@@ -1103,7 +1105,7 @@
   } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
   import { getAnalytics, logEvent, isSupported } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
   import {
-    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+    getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
   const cfg = window.FIREBASE_CONFIG;
@@ -1127,17 +1129,41 @@
   // ---------- AUTENTIKASI GOOGLE (wajib untuk komentar & booking) ----------
   const authWidget = document.getElementById('authWidget');
 
+  const isMobileDevice = () => /Android|iPhone|iPad|iPod|Mobile|webOS/i.test(navigator.userAgent);
+
   async function loginWithGoogle() {
     if (!auth) { alert('Firebase belum dikonfigurasi.'); return null; }
     try {
+      if (isMobileDevice()) {
+        await signInWithRedirect(auth, provider);
+        return null; // halaman akan reload setelah kembali dari Google
+      }
       const result = await signInWithPopup(auth, provider);
       track('login', { method: 'google' });
       return result.user;
     } catch (err) {
       console.error('Gagal masuk dengan Google:', err);
-      alert('Gagal masuk dengan Google. Silakan coba lagi.');
+      let msg = 'Gagal masuk dengan Google. Silakan coba lagi.';
+      if (err && err.code === 'auth/operation-not-allowed') {
+        msg = 'Login Google belum diaktifkan di Firebase Console (Authentication → Sign-in method → Google → Enable).';
+      } else if (err && err.code === 'auth/unauthorized-domain') {
+        msg = 'Domain situs ini belum diizinkan di Firebase Console (Authentication → Settings → Authorized domains). Tambahkan domain situs ini di sana.';
+      } else if (err && err.code === 'auth/popup-blocked') {
+        msg = 'Popup login diblokir browser. Izinkan popup untuk situs ini, lalu coba lagi.';
+      } else if (err && err.code === 'auth/configuration-not-found') {
+        msg = 'Konfigurasi Authentication belum lengkap di Firebase Console. Pastikan provider Google sudah diaktifkan.';
+      }
+      alert(msg);
       return null;
     }
+  }
+
+  if (auth) {
+    getRedirectResult(auth).then(result => {
+      if (result && result.user) track('login', { method: 'google' });
+    }).catch(err => {
+      console.error('Gagal memproses hasil login redirect:', err);
+    });
   }
 
   function renderAuthWidget(user) {
