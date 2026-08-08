@@ -114,6 +114,37 @@
     transition:transform .2s var(--ease), background .2s;
   }
   .nav-cta:hover{background:#f0b356;transform:translateY(-1px);}
+  .auth-widget{display:flex;align-items:center;}
+  .auth-btn{
+    display:flex;align-items:center;gap:9px;
+    background:rgba(244,238,225,0.08);border:1.5px solid rgba(244,238,225,0.28);
+    color:var(--sand);padding:9px 16px 9px 10px;border-radius:100px;
+    font-size:13.5px;font-weight:600;transition:.2s;
+  }
+  .auth-btn:hover{border-color:var(--sand);background:rgba(244,238,225,0.14);}
+  .auth-btn svg{width:17px;height:17px;flex-shrink:0;}
+  .auth-user{display:flex;align-items:center;gap:9px;}
+  .auth-user img{width:28px;height:28px;border-radius:50%;flex-shrink:0;}
+  .auth-user-info{display:flex;flex-direction:column;line-height:1.25;}
+  .auth-user-name{font-size:13px;font-weight:700;color:var(--sand);}
+  .auth-logout{font-size:11.5px;color:rgba(244,238,225,0.6);text-decoration:underline;text-align:left;}
+  .auth-logout:hover{color:var(--sand);}
+  @media (max-width:900px){
+    .auth-widget{order:6;margin-top:6px;width:100%;}
+    .auth-btn{width:100%;justify-content:center;}
+    .auth-user{width:100%;}
+  }
+  .auth-gate{
+    display:none;align-items:center;gap:10px;justify-content:space-between;
+    background:var(--sand-dim);border-radius:12px;padding:12px 14px;
+    font-size:13px;color:#4b5c59;
+  }
+  .auth-gate.show{display:flex;}
+  .auth-gate button{
+    background:var(--navy);color:var(--sand);padding:8px 14px;border-radius:100px;
+    font-size:12.5px;font-weight:700;flex-shrink:0;white-space:nowrap;
+  }
+  .comment-form.locked, .booking-form.locked{display:none;}
   .nav-toggle{display:none;flex-direction:column;gap:5px;width:26px;}
   .nav-toggle span{height:2px;background:var(--sand);border-radius:2px;transition:.3s var(--ease);}
 
@@ -482,6 +513,12 @@
       <li><a href="#harga">Harga Paket</a></li>
       <li><a href="#tentang">Tentang Kami</a></li>
       <li><a href="#booking" class="nav-cta">Rencanakan Perjalanan</a></li>
+      <li class="auth-widget" id="authWidget">
+        <button type="button" class="auth-btn" id="authLoginBtn">
+          <svg viewBox="0 0 24 24"><path fill="#FFC107" d="M21.35 11.1H12v3.9h5.35c-.5 2.4-2.6 4-5.35 4-3.25 0-5.9-2.65-5.9-6s2.65-6 5.9-6c1.5 0 2.85.55 3.9 1.45l2.75-2.75C17.1 3.9 14.7 2.8 12 2.8 6.9 2.8 2.8 6.9 2.8 12S6.9 21.2 12 21.2c6.05 0 9.4-4.25 9.4-9.4 0-.6-.05-1.1-.05-1.7z"/><path fill="none" d="M0 0h24v24H0z"/></svg>
+          Masuk dengan Google
+        </button>
+      </li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Buka menu">
       <span></span><span></span><span></span>
@@ -623,6 +660,10 @@
                 <div class="comment-item"><b>Rani S.</b><span>Jatiluwih sepagi mungkin, sepi dan sejuk banget!</span></div>
                 <div class="comment-item"><b>Dimas P.</b><span>Pemandunya sabar banget jelasin sejarah pura.</span></div>
               </div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
+              </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar..." required>
                 <button type="submit">Kirim</button>
@@ -667,6 +708,10 @@
               <div class="comment-list">
                 <div class="comment-item"><b>Yoga W.</b><span>Tari Kecak saat sunset bikin merinding, wajib nonton.</span></div>
               </div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
+              </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar..." required>
                 <button type="submit">Kirim</button>
@@ -708,6 +753,10 @@
             <div class="comment-inner">
               <div class="comment-list">
                 <div class="comment-item"><b>Sari A.</b><span>Naik-turun tangga Kelingking capek tapi terbayar lunas.</span></div>
+              </div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
               </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar..." required>
@@ -752,6 +801,10 @@
             <div class="comment-inner">
               <div class="comment-list">
                 <div class="comment-item"><b>Agus T.</b><span>Sarapan sambil lihat Danau Batur, susananya tenang banget.</span></div>
+              </div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
               </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar..." required>
@@ -798,6 +851,10 @@
           <div class="comment-panel">
             <div class="comment-inner">
               <div class="comment-list"></div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
+              </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar pertama..." required>
                 <button type="submit">Kirim</button>
@@ -845,6 +902,10 @@
             <div class="comment-inner">
               <div class="comment-list">
                 <div class="comment-item"><b>Nadia F.</b><span>Datang 1 jam sebelum sunset biar dapat spot foto terbaik.</span></div>
+              </div>
+              <div class="auth-gate" data-gate="comment">
+                <span>Masuk dengan Google untuk berkomentar.</span>
+                <button type="button" class="auth-gate-btn">Masuk</button>
               </div>
               <form class="comment-form">
                 <input type="text" placeholder="Tulis komentar..." required>
@@ -972,6 +1033,10 @@
         </div>
       </div>
       <form class="booking-form reveal" id="bookingForm">
+        <div class="auth-gate field-full" data-gate="booking" style="grid-column:1/-1;">
+          <span>Masuk dengan Google untuk kirim permintaan booking.</span>
+          <button type="button" class="auth-gate-btn">Masuk dengan Google</button>
+        </div>
         <div>
           <label for="bkName">Nama Lengkap</label>
           <input id="bkName" name="name" type="text" placeholder="Nama Anda" required>
@@ -1031,7 +1096,7 @@
         <ul>
           <li>hello@ombaknusantara.id</li>
           <li>+62 819-1642-0672</li>
-          <li>Badung, Bali</li>
+          <li>Denpasar, Bali</li>
         </ul>
       </div>
       <div>
@@ -1095,6 +1160,9 @@
     collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
   import { getAnalytics, logEvent, isSupported } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+  import {
+    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
   const cfg = window.FIREBASE_CONFIG;
   const isConfigured = cfg && cfg.apiKey && !cfg.apiKey.startsWith("GANTI");
@@ -1103,14 +1171,81 @@
     console.warn("[Firebase] Belum dikonfigurasi — lengkapi window.FIREBASE_CONFIG di <head>. Like, komentar, dan form booking akan bekerja secara lokal saja (tidak tersimpan permanen) sampai config diisi.");
   }
 
-  let db = null, analytics = null;
+  let db = null, analytics = null, auth = null, provider = null, currentUser = null;
   if (isConfigured) {
     const app = initializeApp(cfg);
     db = getFirestore(app);
     isSupported().then(ok => { if (ok) analytics = getAnalytics(app); });
+    auth = getAuth(app);
+    provider = new GoogleAuthProvider();
   }
 
   const track = (name, params) => { if (analytics) logEvent(analytics, name, params); };
+
+  // ---------- AUTENTIKASI GOOGLE (wajib untuk komentar & booking) ----------
+  const authWidget = document.getElementById('authWidget');
+
+  async function loginWithGoogle() {
+    if (!auth) { alert('Firebase belum dikonfigurasi.'); return null; }
+    try {
+      const result = await signInWithPopup(auth, provider);
+      track('login', { method: 'google' });
+      return result.user;
+    } catch (err) {
+      console.error('Gagal masuk dengan Google:', err);
+      alert('Gagal masuk dengan Google. Silakan coba lagi.');
+      return null;
+    }
+  }
+
+  function renderAuthWidget(user) {
+    if (!authWidget) return;
+    if (user) {
+      authWidget.innerHTML = `
+        <div class="auth-user">
+          <img src="${user.photoURL || ''}" alt="" referrerpolicy="no-referrer">
+          <div class="auth-user-info">
+            <span class="auth-user-name">${user.displayName || 'Pengguna'}</span>
+            <button type="button" class="auth-logout" id="authLogoutBtn">Keluar</button>
+          </div>
+        </div>`;
+      document.getElementById('authLogoutBtn').addEventListener('click', () => signOut(auth));
+    } else {
+      authWidget.innerHTML = `
+        <button type="button" class="auth-btn" id="authLoginBtn">
+          <svg viewBox="0 0 24 24"><path fill="#FFC107" d="M21.35 11.1H12v3.9h5.35c-.5 2.4-2.6 4-5.35 4-3.25 0-5.9-2.65-5.9-6s2.65-6 5.9-6c1.5 0 2.85.55 3.9 1.45l2.75-2.75C17.1 3.9 14.7 2.8 12 2.8 6.9 2.8 2.8 6.9 2.8 12S6.9 21.2 12 21.2c6.05 0 9.4-4.25 9.4-9.4 0-.6-.05-1.1-.05-1.7z"/></svg>
+          Masuk dengan Google
+        </button>`;
+      document.getElementById('authLoginBtn').addEventListener('click', loginWithGoogle);
+    }
+  }
+
+  function updateGatedForms(user) {
+    document.querySelectorAll('.auth-gate').forEach(gate => {
+      gate.classList.toggle('show', !user);
+    });
+    document.querySelectorAll('.comment-form').forEach(f => f.classList.toggle('locked', !user));
+    const bookingForm = document.getElementById('bookingForm');
+    if (bookingForm) {
+      bookingForm.querySelectorAll('input, select, textarea, button[type="submit"]').forEach(el => {
+        el.disabled = !user;
+      });
+    }
+  }
+
+  document.querySelectorAll('.auth-gate-btn').forEach(btn => {
+    btn.addEventListener('click', loginWithGoogle);
+  });
+
+  if (auth) {
+    onAuthStateChanged(auth, user => {
+      currentUser = user;
+      renderAuthWidget(user);
+      updateGatedForms(user);
+    });
+  } else {
+    updateGatedForms(null);
+  }
 
   // ---------- LIKES (per destinasi, tersimpan di koleksi "destinations") ----------
   document.querySelectorAll('.dest-card').forEach(card => {
@@ -1179,11 +1314,18 @@
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!currentUser) { loginWithGoogle(); return; }
         const input = form.querySelector('input');
         const text = input.value.trim();
         if (!text) return;
         try {
-          await addDoc(commentsRef, { name: 'Pengunjung', text, createdAt: serverTimestamp() });
+          await addDoc(commentsRef, {
+            name: currentUser.displayName || currentUser.email || 'Pengguna',
+            uid: currentUser.uid,
+            photoURL: currentUser.photoURL || null,
+            text,
+            createdAt: serverTimestamp()
+          });
           track('post_comment', { destination: destId });
           input.value = '';
         } catch (err) {
@@ -1213,6 +1355,7 @@
   const bookingStatus = document.getElementById('bookingStatus');
   bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!currentUser) { loginWithGoogle(); return; }
     const data = Object.fromEntries(new FormData(bookingForm).entries());
     bookingStatus.className = 'booking-status show';
     bookingStatus.textContent = 'Mengirim...';
@@ -1225,6 +1368,8 @@
     try {
       await addDoc(collection(db, 'bookings'), {
         ...data,
+        uid: currentUser.uid,
+        accountEmail: currentUser.email || null,
         status: 'baru',
         createdAt: serverTimestamp()
       });
