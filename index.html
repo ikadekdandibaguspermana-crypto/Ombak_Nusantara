@@ -152,23 +152,28 @@
 
   @media (max-width:900px){
     .nav-links{
-      position:fixed;top:76px;left:0;right:0;bottom:0;
+      position:fixed;top:76px;left:0;right:0;
+      height:calc(100vh - 76px);height:calc(100dvh - 76px);
       background:var(--navy);
       flex-direction:column;align-items:flex-start;
       padding:24px 24px 30px;gap:6px;
-      transform:translateY(-8px);opacity:0;visibility:hidden;
-      transition:.28s var(--ease);
+      transform:translateY(-12px);opacity:0;visibility:hidden;pointer-events:none;
+      transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s linear .22s;
       border-bottom:1px solid rgba(244,238,225,0.08);
       overflow-y:auto;
-      height:0;
     }
-    .nav-links.open{transform:translateY(0);opacity:1;visibility:visible;height:auto;}
-    .nav-links a{width:100%;padding:12px 4px;font-size:16px;}
+    .nav-links.open{
+      transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto;
+      transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s linear 0s;
+    }
+    .nav-links a{width:100%;padding:14px 4px;font-size:16px;}
+    .nav-links li{width:100%;}
+    .nav-links li:not(:last-child):not(:has(.nav-cta)):not(:has(.auth-widget)){border-bottom:1px solid rgba(244,238,225,0.08);}
     .nav-toggle{display:flex;}
-    .nav-cta{order:5;text-align:center;margin-top:10px;width:100%;white-space:normal;}
+    .nav-cta{order:5;text-align:center;margin-top:14px;width:100%;white-space:normal;}
   }
   @media (max-width:560px){
-    .nav-links{top:64px;}
+    .nav-links{top:64px;height:calc(100vh - 64px);height:calc(100dvh - 64px);}
   }
 
   /* ---------- HERO ---------- */
@@ -1040,7 +1045,7 @@
         <ul>
           <li>hello@ombaknusantara.id</li>
           <li>+62 819-1642-0672</li>
-          <li>Denpasar, Bali</li>
+          <li>Badung, Bali</li>
         </ul>
       </div>
       <div>
