@@ -14,6 +14,22 @@
   Cara mendapatkan: Firebase Console → klik project → ikon gerigi
   (Project settings) → scroll ke "Your apps" → pilih/registrasi app Web (</>)
   → salin object firebaseConfig yang muncul, lalu tempel di bawah ini.
+
+  CATATAN UNTUK FITUR DOKUMENTASI FOTO (baru):
+  Fitur ini memakai Firebase Storage. Pastikan Storage sudah diaktifkan di
+  Firebase Console (menu "Build" → "Storage" → "Get started"), dan atur
+  Storage Rules agar hanya pengguna yang login yang bisa mengunggah, misalnya:
+    rules_version = '2';
+    service firebase.storage {
+      match /b/{bucket}/o {
+        match /gallery/{uid}/{fileName} {
+          allow read: if true;
+          allow write: if request.auth != null && request.auth.uid == uid
+                       && request.resource.size < 8 * 1024 * 1024
+                       && request.resource.contentType.matches('image/.*');
+        }
+      }
+    }
   ====================================================================
 -->
 <script>
@@ -460,6 +476,92 @@
   .tentang-art{border-radius:20px;overflow:hidden;background:var(--navy);}
   .tentang-art svg{width:100%;height:100%;}
 
+  /* ---------- DOKUMENTASI (galeri foto wisatawan) ---------- */
+  .dokumentasi{background:var(--sand-dim);}
+  .doku-head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:36px;}
+  .doku-upload-btn{
+    background:var(--navy);color:var(--sand);padding:13px 24px;border-radius:100px;
+    font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:8px;
+    transition:background .2s, transform .2s var(--ease);flex-shrink:0;
+  }
+  .doku-upload-btn:hover{background:var(--navy-deep);transform:translateY(-2px);}
+  .doku-upload-btn svg{width:18px;height:18px;}
+  .doku-upload-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  #dokuFileInput{display:none;}
+  .doku-gate{margin-bottom:28px;}
+  .doku-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  @media (max-width:980px){.doku-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:700px){.doku-grid{grid-template-columns:repeat(2,1fr);}}
+  .doku-item{
+    position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;
+    background:linear-gradient(160deg,#1c4a42,#0D2B2E);cursor:pointer;
+  }
+  .doku-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s var(--ease);}
+  .doku-item:hover img{transform:scale(1.06);}
+  .doku-caption{
+    position:absolute;left:0;right:0;bottom:0;padding:22px 12px 10px;
+    background:linear-gradient(180deg,rgba(8,27,29,0) 0%, rgba(8,27,29,0.85) 100%);
+    color:var(--sand);font-size:12px;line-height:1.35;
+  }
+  .doku-caption b{display:block;font-size:11.5px;color:var(--gold);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.03em;margin-bottom:2px;}
+  .doku-empty{
+    grid-column:1/-1;text-align:center;padding:50px 20px;color:#5c6863;
+    border:1.5px dashed #ddd0ac;border-radius:16px;font-size:14.5px;background:var(--paper);
+  }
+
+  /* Lightbox foto dokumentasi */
+  .doku-lightbox{
+    position:fixed;inset:0;background:rgba(8,27,29,0.92);z-index:200;
+    display:none;align-items:center;justify-content:center;padding:40px 20px;
+  }
+  .doku-lightbox.open{display:flex;}
+  .doku-lightbox-inner{max-width:min(880px,92vw);}
+  .doku-lightbox img{max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;margin:0 auto;}
+  .doku-lightbox-cap{color:var(--sand);text-align:center;margin-top:16px;font-size:14px;}
+  .doku-lightbox-cap b{color:var(--gold);}
+  .doku-lightbox-close{
+    position:absolute;top:24px;right:28px;color:var(--sand);width:40px;height:40px;
+    border-radius:50%;border:1.5px solid rgba(244,238,225,0.35);display:flex;align-items:center;justify-content:center;
+  }
+  .doku-lightbox-close:hover{background:rgba(244,238,225,0.12);}
+  .doku-lightbox-close svg{width:18px;height:18px;}
+
+  @media (max-width:560px){
+    .doku-head-row{align-items:stretch;}
+    .doku-upload-btn{justify-content:center;width:100%;}
+    .doku-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  }
+
+  /* ---------- DOKUMENTASI DRIVER (dikelola lewat kode, bukan upload publik) ---------- */
+  .driver-dok{background:var(--navy);}
+  .driver-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+  }
+  @media (max-width:980px){.driver-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:700px){.driver-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:420px){.driver-grid{grid-template-columns:1fr;max-width:280px;margin:0 auto;}}
+  .driver-card{
+    background:var(--paper);border-radius:18px;overflow:hidden;
+    box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);
+  }
+  .driver-photo-wrap{position:relative;aspect-ratio:1/1;background:linear-gradient(160deg,#1c4a42,#0D2B2E);overflow:hidden;}
+  .driver-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+  .driver-photo-wrap.no-photo img,
+  .driver-photo-wrap img[src=""]{display:none;}
+  .driver-placeholder{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:rgba(244,238,225,0.35);}
+  .driver-photo-wrap.no-photo .driver-placeholder{display:flex;}
+  .driver-placeholder svg{width:46%;height:46%;}
+  .driver-info{padding:18px 18px 20px;}
+  .driver-info h3{font-size:16.5px;margin-bottom:3px;}
+  .driver-role{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+  .driver-info p.driver-desc{font-size:13px;color:#57645f;}
+  .driver-note{
+    text-align:center;font-size:13px;color:rgba(244,238,225,0.55);margin-top:34px;
+    font-family:var(--font-mono);
+  }
+
   /* ---------- CTA BAND ---------- */
   .cta-band{
     background:linear-gradient(120deg,var(--coral),var(--gold));
@@ -521,6 +623,8 @@
       <li><a href="#keunggulan">Keunggulan</a></li>
       <li><a href="#destinasi">Destinasi Bali</a></li>
       <li><a href="#harga">Harga Paket</a></li>
+      <li><a href="#dokumentasi">Dokumentasi</a></li>
+      <li><a href="#driver-dokumentasi">Tim Driver</a></li>
       <li><a href="#tentang">Tentang Kami</a></li>
       <li><a href="#booking" class="nav-cta">Rencanakan Perjalanan</a></li>
       <li class="auth-widget" id="authWidget">
@@ -927,6 +1031,73 @@
   </div>
 </section>
 
+<section class="dokumentasi" id="dokumentasi">
+  <div class="wrap">
+    <div class="doku-head-row reveal">
+      <div class="sec-head" style="margin-bottom:0;">
+        <p class="eyebrow">Dokumentasi Wisatawan</p>
+        <h2>Momen dari Perjalanan Bali Anda</h2>
+        <p>Bagikan foto perjalanan Anda bersama kami. Masuk dengan Google, lalu unggah foto favorit Anda ke galeri ini untuk dilihat wisatawan lain.</p>
+      </div>
+      <div>
+        <input type="file" id="dokuFileInput" accept="image/*">
+        <button type="button" class="doku-upload-btn" id="dokuUploadBtn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+          Unggah Foto
+        </button>
+      </div>
+    </div>
+
+    <div class="auth-gate doku-gate" data-gate="doku">
+      <span>Masuk dengan Google untuk mengunggah foto dokumentasi.</span>
+      <button type="button" class="auth-gate-btn">Masuk dengan Google</button>
+    </div>
+
+    <div class="doku-grid reveal" id="dokuGrid">
+      <p class="doku-empty">Belum ada foto. Jadilah yang pertama membagikan momen perjalanan Anda!</p>
+    </div>
+  </div>
+</section>
+
+<div class="doku-lightbox" id="dokuLightbox">
+  <button type="button" class="doku-lightbox-close" id="dokuLightboxClose" aria-label="Tutup">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="doku-lightbox-inner">
+    <img id="dokuLightboxImg" src="" alt="Dokumentasi perjalanan">
+    <p class="doku-lightbox-cap" id="dokuLightboxCap"></p>
+  </div>
+</div>
+
+<!--
+  ====================================================================
+  SECTION DOKUMENTASI DRIVER — hanya bisa diisi lewat kode (VSCode),
+  TIDAK ada tombol upload publik di sini, jadi hanya Anda yang bisa
+  menambah/mengubah foto driver.
+
+  CARA MENAMBAH / MENGGANTI FOTO DRIVER:
+  1. Buka file ini di VSCode.
+  2. Cari komentar "EDIT DAFTAR DRIVER DI SINI" di bagian <script> paling
+     bawah file (dekat penutup </body>).
+  3. Tambahkan foto driver ke folder yang sama dengan file HTML ini
+     (atau gunakan URL foto langsung), lalu isi array DRIVER_LIST dengan
+     nama, jabatan, deskripsi singkat, dan nama file/URL foto tersebut.
+  4. Simpan file — daftar driver otomatis tampil di sini tanpa perlu
+     Firebase atau login apa pun.
+  ====================================================================
+-->
+<section class="driver-dok on-dark" id="driver-dokumentasi">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="eyebrow">Dokumentasi Driver</p>
+      <h2>Kenalan dengan Sopir &amp; Pemandu Kami</h2>
+      <p>Wajah-wajah yang akan menemani perjalanan Anda keliling Bali. Daftar ini dikelola langsung oleh tim kami.</p>
+    </div>
+    <div class="driver-grid reveal" id="driverGrid"></div>
+    <p class="driver-note">Daftar driver dikelola langsung oleh tim Ombak Nusantara.</p>
+  </div>
+</section>
+
 <section class="tentang" id="tentang">
   <div class="wrap">
     <div class="tentang-grid">
@@ -1037,6 +1208,8 @@
           <li><a href="#keunggulan">Keunggulan</a></li>
           <li><a href="#destinasi">Destinasi Bali</a></li>
           <li><a href="#harga">Harga Paket</a></li>
+          <li><a href="#dokumentasi">Dokumentasi</a></li>
+          <li><a href="#driver-dokumentasi">Tim Driver</a></li>
           <li><a href="#tentang">Tentang Kami</a></li>
         </ul>
       </div>
@@ -1095,10 +1268,78 @@
       btn.classList.toggle('open', isOpen);
     });
   });
+
+  // ==================================================================
+  // EDIT DAFTAR DRIVER DI SINI
+  // Tidak pakai Firebase / login — hanya Anda yang mengedit lewat kode.
+  // Isi "photo" dengan nama file gambar (letakkan di folder yang sama
+  // dengan file HTML ini) atau URL foto langsung. Kosongkan/hapus baris
+  // "photo" atau biarkan file tidak ditemukan untuk memakai ikon default.
+  // ==================================================================
+  const DRIVER_LIST = [
+    {
+      name: "Wayan Sudarsana",
+      role: "Driver & Pemandu Senior",
+      photo: "driver-wayan.jpg",
+      desc: "10+ tahun mengantar wisatawan keliling Bali, fasih berbahasa Inggris."
+    },
+    {
+      name: "Made Arta",
+      role: "Driver & Pemandu",
+      photo: "driver-made.jpg",
+      desc: "Menguasai rute Ubud dan Kintamani, ramah dan tepat waktu."
+    },
+    {
+      name: "Ketut Wirawan",
+      role: "Driver & Pemandu",
+      photo: "driver-ketut.jpg",
+      desc: "Spesialis rute pantai & sunset seperti Uluwatu dan Tanah Lot."
+    },
+    {
+      name: "Nyoman Astawa",
+      role: "Driver & Pemandu",
+      photo: "driver-nyoman.jpg",
+      desc: "Pengalaman memandu trip Nusa Penida dan penyeberangan kapal."
+    }
+  ];
+
+  function renderDriverGrid() {
+    const grid = document.getElementById('driverGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    DRIVER_LIST.forEach(d => {
+      const card = document.createElement('article');
+      card.className = 'driver-card';
+      card.innerHTML = `
+        <div class="driver-photo-wrap">
+          <img src="${d.photo || ''}" alt="${d.name}" loading="lazy">
+          <div class="driver-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          </div>
+        </div>
+        <div class="driver-info">
+          <h3></h3>
+          <p class="driver-role"></p>
+          <p class="driver-desc"></p>
+        </div>`;
+      card.querySelector('h3').textContent = d.name;
+      card.querySelector('.driver-role').textContent = d.role;
+      card.querySelector('.driver-desc').textContent = d.desc;
+      const photoWrap = card.querySelector('.driver-photo-wrap');
+      const img = card.querySelector('img');
+      if (!d.photo) {
+        photoWrap.classList.add('no-photo');
+      } else {
+        img.addEventListener('error', () => photoWrap.classList.add('no-photo'));
+      }
+      grid.appendChild(card);
+    });
+  }
+  renderDriverGrid();
 </script>
 
 <!-- ============================================================
-     INTEGRASI FIREBASE (Firestore + Analytics)
+     INTEGRASI FIREBASE (Firestore + Storage + Analytics)
      Isi window.FIREBASE_CONFIG di <head> dengan config asli Anda
      sebelum bagian ini bisa berfungsi.
      ============================================================ -->
@@ -1117,7 +1358,7 @@
   const isConfigured = cfg && cfg.apiKey && !cfg.apiKey.startsWith("GANTI");
 
   if (!isConfigured) {
-    console.warn("[Firebase] Belum dikonfigurasi — lengkapi window.FIREBASE_CONFIG di <head>. Like, komentar, dan form booking akan bekerja secara lokal saja (tidak tersimpan permanen) sampai config diisi.");
+    console.warn("[Firebase] Belum dikonfigurasi — lengkapi window.FIREBASE_CONFIG di <head>. Like, komentar, form booking, dan foto dokumentasi akan bekerja secara lokal saja (tidak tersimpan permanen) sampai config diisi.");
   }
 
   let db = null, analytics = null, auth = null, provider = null, currentUser = null;
@@ -1131,7 +1372,7 @@
 
   const track = (name, params) => { if (analytics) logEvent(analytics, name, params); };
 
-  // ---------- AUTENTIKASI GOOGLE (wajib untuk komentar & booking) ----------
+  // ---------- AUTENTIKASI GOOGLE (wajib untuk komentar, booking & unggah foto) ----------
   const authWidget = document.getElementById('authWidget');
 
   async function loginWithGoogle() {
@@ -1206,6 +1447,10 @@
       bookingForm.querySelectorAll('input, select, textarea, button[type="submit"]').forEach(el => {
         el.disabled = !user;
       });
+    }
+    const dokuBtn = document.getElementById('dokuUploadBtn');
+    if (dokuBtn && isConfigured) {
+      dokuBtn.disabled = !user;
     }
   }
 
@@ -1361,6 +1606,123 @@
       bookingStatus.textContent = 'Gagal mengirim, silakan coba lagi atau hubungi kami via WhatsApp.';
     }
   });
+
+  // ---------- DOKUMENTASI (galeri foto wisatawan, koleksi "gallery") ----------
+  const dokuFileInput = document.getElementById('dokuFileInput');
+  const dokuUploadBtn = document.getElementById('dokuUploadBtn');
+  const dokuGrid = document.getElementById('dokuGrid');
+  const dokuLightbox = document.getElementById('dokuLightbox');
+  const dokuLightboxImg = document.getElementById('dokuLightboxImg');
+  const dokuLightboxCap = document.getElementById('dokuLightboxCap');
+  const dokuLightboxClose = document.getElementById('dokuLightboxClose');
+
+  let storage = null;
+  const localGallery = []; // fallback jika Firebase belum dikonfigurasi (tidak permanen)
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+
+  function openLightbox(src, name, caption) {
+    dokuLightboxImg.src = src;
+    dokuLightboxCap.innerHTML = `<b>${escapeHtml(name || 'Pengunjung')}</b>${caption ? ' — ' + escapeHtml(caption) : ''}`;
+    dokuLightbox.classList.add('open');
+  }
+  function closeLightbox() {
+    dokuLightbox.classList.remove('open');
+    dokuLightboxImg.src = '';
+  }
+  dokuLightboxClose.addEventListener('click', closeLightbox);
+  dokuLightbox.addEventListener('click', (e) => { if (e.target === dokuLightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+  function renderDokuGrid(items) {
+    dokuGrid.innerHTML = '';
+    if (!items.length) {
+      dokuGrid.innerHTML = '<p class="doku-empty">Belum ada foto. Jadilah yang pertama membagikan momen perjalanan Anda!</p>';
+      return;
+    }
+    items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'doku-item';
+      el.innerHTML = `
+        <img src="${item.photoURL}" alt="Foto dokumentasi oleh ${escapeHtml(item.name || 'pengunjung')}" loading="lazy">
+        <div class="doku-caption"><b>${escapeHtml(item.name || 'Pengunjung')}</b>${item.caption ? escapeHtml(item.caption) : ''}</div>`;
+      el.addEventListener('click', () => openLightbox(item.photoURL, item.name, item.caption));
+      dokuGrid.appendChild(el);
+    });
+  }
+
+  if (isConfigured) {
+    import("https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js").then(({ getStorage, ref: storageRef, uploadBytes, getDownloadURL }) => {
+      storage = getStorage();
+
+      const galleryRef = collection(db, 'gallery');
+      const gq = query(galleryRef, orderBy('createdAt', 'desc'), limit(24));
+      onSnapshot(gq, snap => {
+        const items = [];
+        snap.forEach(docSnap => items.push(docSnap.data()));
+        renderDokuGrid(items);
+      }, err => console.error('Gagal memuat galeri:', err));
+
+      dokuUploadBtn.addEventListener('click', () => {
+        if (!currentUser) { loginWithGoogle(); return; }
+        dokuFileInput.click();
+      });
+
+      dokuFileInput.addEventListener('change', async () => {
+        const file = dokuFileInput.files[0];
+        dokuFileInput.value = '';
+        if (!file || !currentUser) return;
+        if (!file.type.startsWith('image/')) { alert('Mohon pilih file gambar (jpg, png, atau webp).'); return; }
+        if (file.size > 8 * 1024 * 1024) { alert('Ukuran foto maksimal 8MB.'); return; }
+
+        const caption = (prompt('Tambahkan keterangan singkat untuk foto ini (opsional):') || '').slice(0, 140);
+
+        dokuUploadBtn.disabled = true;
+        const originalLabel = dokuUploadBtn.innerHTML;
+        dokuUploadBtn.textContent = 'Mengunggah...';
+        try {
+          const path = `gallery/${currentUser.uid}/${Date.now()}-${file.name}`;
+          const fileRef = storageRef(storage, path);
+          await uploadBytes(fileRef, file);
+          const url = await getDownloadURL(fileRef);
+          await addDoc(collection(db, 'gallery'), {
+            photoURL: url,
+            caption,
+            name: currentUser.displayName || currentUser.email || 'Pengguna',
+            uid: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+          track('upload_photo', {});
+        } catch (err) {
+          console.error('Gagal unggah foto:', err);
+          alert('Gagal mengunggah foto. Pastikan Firebase Storage sudah diaktifkan di Firebase Console (menu Build → Storage).');
+        } finally {
+          dokuUploadBtn.disabled = !currentUser;
+          dokuUploadBtn.innerHTML = originalLabel;
+        }
+      });
+    }).catch(err => {
+      console.error('Gagal memuat Firebase Storage:', err);
+    });
+  } else {
+    // Fallback tanpa Firebase: foto hanya tersimpan sementara di sesi browser ini.
+    renderDokuGrid(localGallery);
+    dokuUploadBtn.disabled = false;
+    dokuUploadBtn.addEventListener('click', () => dokuFileInput.click());
+    dokuFileInput.addEventListener('change', () => {
+      const file = dokuFileInput.files[0];
+      dokuFileInput.value = '';
+      if (!file || !file.type.startsWith('image/')) return;
+      const caption = (prompt('Tambahkan keterangan singkat untuk foto ini (opsional):') || '').slice(0, 140);
+      const url = URL.createObjectURL(file);
+      localGallery.unshift({ photoURL: url, caption, name: 'Anda' });
+      renderDokuGrid(localGallery);
+    });
+  }
 
   if (analytics === null && isConfigured) {
     // Analytics diaktifkan async setelah isSupported() resolve; tidak memblokir fitur lain.
