@@ -554,10 +554,8 @@
   .driver-placeholder{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:rgba(244,238,225,0.35);}
   .driver-photo-wrap.no-photo .driver-placeholder{display:flex;}
   .driver-placeholder svg{width:46%;height:46%;}
-  .driver-info{padding:18px 18px 20px;}
-  .driver-info h3{font-size:16.5px;margin-bottom:3px;}
-  .driver-role{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
-  .driver-info p.driver-desc{font-size:13px;color:#57645f;}
+  .driver-info{padding:16px 18px;}
+  .driver-info p.driver-caption{font-size:14px;font-weight:600;color:var(--ink);text-align:center;}
   .driver-note{
     text-align:center;font-size:13px;color:rgba(244,238,225,0.55);margin-top:34px;
     font-family:var(--font-mono);
@@ -1279,28 +1277,20 @@
   // ==================================================================
   const DRIVER_LIST = [
     {
-      name: "Wayan Sudarsana",
-      role: "Driver & Pemandu Senior",
-      photo: "dokumentasi 1.jpeg",
-      desc: "10+ tahun mengantar wisatawan keliling Bali, fasih berbahasa Inggris."
+      caption: "Driver dan Pelanggan",
+      photo: "dokumentasi 1.jpeg"
     },
     {
-      name: "Made Arta",
-      role: "Driver & Pemandu",
-      photo: "dokumentasi 2.jpeg",
-      desc: "Menguasai rute Ubud dan Kintamani, ramah dan tepat waktu."
+      caption: "Driver dan Pelanggan",
+      photo: "dokumentasi 2.jpeg"
     },
     {
-      name: "Ketut Wirawan",
-      role: "Driver & Pemandu",
-      photo: "dokumentasi 3.jpeg",
-      desc: "Spesialis rute pantai & sunset seperti Uluwatu dan Tanah Lot."
+      caption: "Driver dan Pelanggan",
+      photo: "dokumentasi 3.jpeg"
     },
     {
-      name: "Nyoman Astawa",
-      role: "Driver & Pemandu",
-      photo: "dokumentasi 4.jpeg",
-      desc: "Pengalaman memandu trip Nusa Penida dan penyeberangan kapal."
+      caption: "Driver dan Pelanggan",
+      photo: "dokumentasi 4.jpeg"
     }
   ];
 
@@ -1313,19 +1303,15 @@
       card.className = 'driver-card';
       card.innerHTML = `
         <div class="driver-photo-wrap">
-          <img src="${d.photo || ''}" alt="${d.name}" loading="lazy">
+          <img src="${d.photo || ''}" alt="${d.caption}" loading="lazy">
           <div class="driver-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
           </div>
         </div>
         <div class="driver-info">
-          <h3></h3>
-          <p class="driver-role"></p>
-          <p class="driver-desc"></p>
+          <p class="driver-caption"></p>
         </div>`;
-      card.querySelector('h3').textContent = d.name;
-      card.querySelector('.driver-role').textContent = d.role;
-      card.querySelector('.driver-desc').textContent = d.desc;
+      card.querySelector('.driver-caption').textContent = d.caption;
       const photoWrap = card.querySelector('.driver-photo-wrap');
       const img = card.querySelector('img');
       if (!d.photo) {
